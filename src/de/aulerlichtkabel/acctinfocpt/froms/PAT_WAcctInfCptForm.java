@@ -238,6 +238,8 @@ public class PAT_WAcctInfCptForm
 
 	/** Logger */
 	public static CLogger log = CLogger.getCLogger(PAT_WAcctInfCptForm.class);
+	
+	private String languageCode = "";
 
 	public PAT_WAcctInfCptForm() {
 
@@ -251,6 +253,7 @@ public class PAT_WAcctInfCptForm
 	}
 
 	private void init() {
+		languageCode = Env.getLanguage(Env.getCtx()).getLanguageCode();
 		
 		textboxClient.setReadonly(true);
 
@@ -258,19 +261,19 @@ public class PAT_WAcctInfCptForm
 		searchEditorValueFrom = new WSearchEditor("C_ElementValue_ID", false, false, true, acctVaL);
 		searchEditorValueTo = new WSearchEditor("C_ElementValue_ID", false, false, true, acctVaL);
 
-		labelProduct.setValue(Msg.translate(Env.getCtx(), "Product"));
+		labelProduct.setValue(Msg.translate(Env.getCtx(), "M_Product_ID"));
 		MLookup productVaL = MLookupFactory.get(Env.getCtx(), mForm.getWindowNo(), 0, 1402, DisplayType.Search);
 		searchEditorProduct = new WSearchEditor("M_Product_ID", false, false, true, productVaL);
 
-		labelBPartner.setValue(Msg.translate(Env.getCtx(), "Businesspartner"));
+		labelBPartner.setValue(Msg.translate(Env.getCtx(), "C_BPartner_ID"));
 		MLookup bPartnerVaL = MLookupFactory.get(Env.getCtx(), mForm.getWindowNo(), 0, 2893, DisplayType.Search);
 		searchEditorBPartner = new WSearchEditor("C_BPartner_ID", false, false, true, bPartnerVaL);
 
-		labelSalesRegion.setValue(Msg.translate(Env.getCtx(), "SalesRegion"));
+		labelSalesRegion.setValue(Msg.translate(Env.getCtx(), "C_SalesRegion_ID"));
 		MLookup salesRegionVaL = MLookupFactory.get(Env.getCtx(), mForm.getWindowNo(), 0, 1823, DisplayType.Search);
 		searchEditorSalesRegion = new WSearchEditor("C_SalesRegion_ID", false, false, true, salesRegionVaL);
 
-		labelProject.setValue(Msg.translate(Env.getCtx(), "Project"));
+		labelProject.setValue(Msg.translate(Env.getCtx(), "C_Project_ID"));
 		MLookup projectVaL = MLookupFactory.get(Env.getCtx(), mForm.getWindowNo(), 0, 1349, DisplayType.Search);
 		searchEditorProject = new WSearchEditor("C_Project_ID", false, false, true, projectVaL);
 		
@@ -404,7 +407,7 @@ public class PAT_WAcctInfCptForm
 		textboxClient.setWidth("100px");
 		// textboxClient.setStyle("text-align: right");
 
-		labelOrganisation.setValue(Msg.translate(Env.getCtx(), "Organisation"));
+		labelOrganisation.setValue(Msg.translate(Env.getCtx(), "AD_Org_ID"));
 
 		listboxOrganisation.appendItem("*",null);
 		for (MOrg org : p_data.getOrganisations())
@@ -425,25 +428,40 @@ public class PAT_WAcctInfCptForm
 
 		labelDateTo.setValue(Msg.translate(Env.getCtx(), "DateTo"));
 		
-		labelWithAdjustmentPeriod.setValue(Msg.translate(Env.getCtx(), "Period Type"));
+		labelWithAdjustmentPeriod.setValue(Msg.translate(Env.getCtx(), "PeriodType"));
 		listboxWithAdjustmentPeriod.appendItem(Msg.translate(Env.getCtx(),"*"), "%");
-		listboxWithAdjustmentPeriod.appendItem(Msg.translate(Env.getCtx(),"Standard Period"), "S");
-		listboxWithAdjustmentPeriod.appendItem(Msg.translate(Env.getCtx(),"Adjustment Period"), "A");
+		if(languageCode.equals("it")) {
+			listboxWithAdjustmentPeriod.appendItem("Periodo Esercizio Standard", "S");
+			listboxWithAdjustmentPeriod.appendItem("Periodo di rettifica", "A");
+		}
+		else {
+			listboxWithAdjustmentPeriod.appendItem(Msg.translate(Env.getCtx(),"Standard Period"), "S");
+			listboxWithAdjustmentPeriod.appendItem(Msg.translate(Env.getCtx(),"Adjustment Period"), "A");
+		}
 		
 		
-		labelValueFrom.setValue(Msg.translate(Env.getCtx(), "ValueFrom"));
+		labelValueFrom.setValue(Msg.translate(Env.getCtx(), "C_ElementValue_ID")+" "+  Msg.translate(Env.getCtx(), "From"));
 		searchEditorValueFrom.addValueChangeListener(this);
 
-		labelValueTo.setValue(Msg.translate(Env.getCtx(), "ValueTo"));
+		labelValueTo.setValue(Msg.translate(Env.getCtx(), "C_ElementValue_ID")+" "+  Msg.translate(Env.getCtx(), "To"));
 		searchEditorValueTo.addValueChangeListener(this);
 
-		checkboxOnYear.setLabel(Msg.translate(Env.getCtx(), "OnYear"));
+		if(languageCode.equals("it"))
+			checkboxOnYear.setLabel(Msg.translate(Env.getCtx(), "Annuale"));
+		else
+			checkboxOnYear.setLabel(Msg.translate(Env.getCtx(), "OnYear"));
 		checkboxOnYear.addActionListener(this);
-
-		checkboxOnMonth.setLabel(Msg.translate(Env.getCtx(), "OnMonth"));
+		
+		if(languageCode.equals("it"))
+			checkboxOnMonth.setLabel(Msg.translate(Env.getCtx(), "Mensile"));
+		else
+			checkboxOnMonth.setLabel(Msg.translate(Env.getCtx(), "OnMonth"));
 		checkboxOnMonth.addActionListener(this);
 
-		checkboxOnDay.setLabel(Msg.translate(Env.getCtx(), "OnDay"));
+		if(languageCode.equals("it"))
+			checkboxOnDay.setLabel(Msg.translate(Env.getCtx(), "Giornaliero"));
+		else
+			checkboxOnDay.setLabel(Msg.translate(Env.getCtx(), "OnDay"));
 		checkboxOnDay.addActionListener(this);
 
 		listboxSummaryTable.setWidth("100px");
@@ -541,8 +559,14 @@ public class PAT_WAcctInfCptForm
 		searchEditorProject.setValue(null);
 		searchEditorSalesRegion.setValue(null);
 
-		labelDebit.setValue(Msg.translate(Env.getCtx(), "Debit"));
-		labelCredit.setValue(Msg.translate(Env.getCtx(), "Credit"));
+		if(languageCode.equals("it")) {
+			labelDebit.setValue(Msg.translate(Env.getCtx(), "Debito"));
+			labelCredit.setValue(Msg.translate(Env.getCtx(), "Credito"));
+		}else {
+			labelDebit.setValue(Msg.translate(Env.getCtx(), "Debit"));
+			labelCredit.setValue(Msg.translate(Env.getCtx(), "Credit"));
+		}
+		
 		labelBalance.setValue(Msg.translate(Env.getCtx(), "Balance"));
 		labelBalance.setStyle("color:black;font-weight: bold");
 
@@ -571,10 +595,15 @@ public class PAT_WAcctInfCptForm
 	private void createSouthPanel() {
 
 		buttonPanel.appendChild(buttonLayout);
-
-		labelDebit.setValue(Msg.translate(Env.getCtx(), "Debit"));
+		if(languageCode.equals("it"))
+			labelDebit.setValue(Msg.translate(Env.getCtx(), "Debito"));
+		else
+			labelDebit.setValue(Msg.translate(Env.getCtx(), "Debit"));
 		labelDebit.setStyle("font-weight: bold");
-		labelCredit.setValue(Msg.translate(Env.getCtx(), "Credit"));
+		if(languageCode.equals("it"))
+			labelCredit.setValue(Msg.translate(Env.getCtx(), "Credito"));
+		else
+			labelCredit.setValue(Msg.translate(Env.getCtx(), "Credit"));
 		labelCredit.setStyle("font-weight: bold");
 		labelBalance.setValue(Msg.translate(Env.getCtx(), "Balance"));
 		labelBalance.setStyle("font-weight: bold");
@@ -622,14 +651,21 @@ public class PAT_WAcctInfCptForm
 
 		List<String> headColumn = new ArrayList<String>();
 		headColumn.add(Msg.translate(Env.getCtx(), "Client"));
-		headColumn.add(Msg.translate(Env.getCtx(), "Organisation"));
+		headColumn.add(Msg.translate(Env.getCtx(), "AD_Org_ID"));
 		headColumn.add(Msg.translate(Env.getCtx(), "Account"));
-		headColumn.add(Msg.translate(Env.getCtx(), "Name"));
+		headColumn.add(Msg.translate(Env.getCtx(), "Name").replaceAll("[&]", ""));
 		// In this case balance_carried_forward, debit, credit, current_balance, ending_balance
 		if(isBalanceOfAccountsList){
-			headColumn.add(Msg.translate(Env.getCtx(), "BalanceCarriedForward"));
-			headColumn.add(Msg.translate(Env.getCtx(), "Debit"));
-			headColumn.add(Msg.translate(Env.getCtx(), "Credit"));
+			if(languageCode.equals("it")) {
+				headColumn.add(Msg.translate(Env.getCtx(), "Saldo Riportato"));
+				headColumn.add(Msg.translate(Env.getCtx(), "Debito"));
+				headColumn.add(Msg.translate(Env.getCtx(), "Credito"));
+			}else {
+				headColumn.add(Msg.translate(Env.getCtx(), "BalanceCarriedForward"));
+				headColumn.add(Msg.translate(Env.getCtx(), "Debit"));
+				headColumn.add(Msg.translate(Env.getCtx(), "Credit"));
+			}
+			
 			headColumn.add(Msg.translate(Env.getCtx(), "Balance"));
 			headColumn.add(Msg.translate(Env.getCtx(), "CurrentBalance"));
 			headColumn.add(Msg.translate(Env.getCtx(), "EndingBalance"));
@@ -638,14 +674,20 @@ public class PAT_WAcctInfCptForm
 			headColumn.add(Msg.translate(Env.getCtx(), ""));
 		}else{
 			headColumn.add(Msg.translate(Env.getCtx(), "DateAcct"));
-			headColumn.add(Msg.translate(Env.getCtx(), "Debit"));
-			headColumn.add(Msg.translate(Env.getCtx(), "Credit"));
+			if(languageCode.equals("it")) {
+				headColumn.add(Msg.translate(Env.getCtx(), "Debito"));
+				headColumn.add(Msg.translate(Env.getCtx(), "Credito"));
+			}
+			else {
+				headColumn.add(Msg.translate(Env.getCtx(), "Debit"));
+				headColumn.add(Msg.translate(Env.getCtx(), "Credit"));
+			}
 			headColumn.add(Msg.translate(Env.getCtx(), "Balance"));
-			headColumn.add(Msg.translate(Env.getCtx(), new String("Product").replaceAll("[&]", "")));			
-			headColumn.add(Msg.translate(Env.getCtx(), new String("BPartner").replaceAll("[&]", "")));
-			headColumn.add(Msg.translate(Env.getCtx(), "SalesRegion"));
-			headColumn.add(Msg.translate(Env.getCtx(), "Project"));
-			headColumn.add(Msg.translate(Env.getCtx(), "Table"));
+			headColumn.add(Msg.translate(Env.getCtx(), "M_Product_ID".replaceAll("[&]", "")));			
+			headColumn.add(Msg.translate(Env.getCtx(), "C_BPartner_ID".replaceAll("[&]", "")));
+			headColumn.add(Msg.translate(Env.getCtx(), "C_SalesRegion_ID"));
+			headColumn.add(Msg.translate(Env.getCtx(), "C_Project_ID"));
+			headColumn.add(Msg.translate(Env.getCtx(), "AD_Table_ID"));
 		}
 
 		return headColumn;
@@ -679,14 +721,28 @@ public class PAT_WAcctInfCptForm
 	private List<String> getHeadColumns(){
 		
 		List<String> headColumns = new ArrayList<String>();
-		
+		///Translate
+		String trl_BalanceCarriedForward = "";
+		String trl_Debit = "";
+		String trl_Credit = "";
+		if(languageCode.equals("it")) {
+			trl_BalanceCarriedForward = "Saldo Riportato";
+			trl_Debit = "Debito";                
+			trl_Credit = "Credito";               
+		}
+		else {
+			trl_BalanceCarriedForward = "BalanceCarriedForward";
+			trl_Debit = "Debit";                
+			trl_Credit = "Credit";   
+		}
+		///
 		for(Component listhead : listboxResult.getHeads())
 			if(listhead instanceof ListHead)
 				for (Component listheader : listhead.getChildren()){
 					if(listheader instanceof ListHeader){
-						if(((ListHeader)listheader).getLabel().equals(Msg.translate(Env.getCtx(), "BalanceCarriedForward"))
-									||((ListHeader)listheader).getLabel().equals(Msg.translate(Env.getCtx(), "Debit"))
-									||((ListHeader)listheader).getLabel().equals(Msg.translate(Env.getCtx(), "Credit"))
+						if(((ListHeader)listheader).getLabel().equals(Msg.translate(Env.getCtx(), trl_BalanceCarriedForward))
+									||((ListHeader)listheader).getLabel().equals(Msg.translate(Env.getCtx(), trl_Debit))
+									||((ListHeader)listheader).getLabel().equals(Msg.translate(Env.getCtx(), trl_Credit))
 									||((ListHeader)listheader).getLabel().equals(Msg.translate(Env.getCtx(), "Balance"))
 									||((ListHeader)listheader).getLabel().equals(Msg.translate(Env.getCtx(), "CurrentBalance"))
 									||((ListHeader)listheader).getLabel().equals(Msg.translate(Env.getCtx(), "EndingBalance")))
@@ -747,6 +803,18 @@ public class PAT_WAcctInfCptForm
 	}
 
 	private ListHead createHeader(List<String> columns) {
+		///Translate
+		String trl_Debit = "";
+		String trl_Credit = "";
+		if(languageCode.equals("it")) {
+			trl_Debit = "Debito";                
+			trl_Credit = "Credito";               
+		}
+		else {
+			trl_Debit = "Debit";                
+			trl_Credit = "Credit";   
+		}
+		///
 
 		ListHead listhead = new ListHead();
 		listhead.setSizable(true);
@@ -756,7 +824,7 @@ public class PAT_WAcctInfCptForm
 			ListHeader lstclolumn = new ListHeader();
 			
 			lstclolumn.setLabel(Msg.getMsg(Env.getCtx(), column));
-			if (column.equals("DateAcct") || column.equals("Debit") || column.equals("Credit")
+			if (column.equals("DateAcct") || column.equals(trl_Debit) || column.equals(trl_Credit)
 					|| column.equals("Balance"))
 				lstclolumn.setAlign("right");
 			listhead.appendChild(lstclolumn);
@@ -993,11 +1061,20 @@ public class PAT_WAcctInfCptForm
 			rowAdjustmentPeriod.setVisible(true);
 			
 			tabBox.setSelectedIndex(0);
-
-			tabResult.setLabel(Msg.getMsg(Env.getCtx(), "Result").replaceAll("[&]", "") + " - "
-					+ Msg.getMsg(Env.getCtx(), "AccountCourse").replaceAll("[&]", ""));
+			String translate = "";
+			String trl_Result = "";
+			if(languageCode.equals("it")) { 
+				translate = "Movimenti Contabili";
+				trl_Result = "Risultato";
+			}
+			else {
+				translate = "AccountCourse";
+				trl_Result = "Result";
+			}
+			tabResult.setLabel(Msg.getMsg(Env.getCtx(), trl_Result).replaceAll("[&]", "") + " - "
+					+ Msg.getMsg(Env.getCtx(), translate).replaceAll("[&]", ""));
 			tabParameter.setLabel(Msg.getMsg(Env.getCtx(), "Query").replaceAll("[&]", "") + " - "
-					+ Msg.getMsg(Env.getCtx(), "AccountCourse").replaceAll("[&]", ""));
+					+ Msg.getMsg(Env.getCtx(), translate).replaceAll("[&]", ""));
 
 		}
 
@@ -1026,11 +1103,20 @@ public class PAT_WAcctInfCptForm
 			rowAdjustmentPeriod.setVisible(true);
 
 			tabBox.setSelectedIndex(0);
-
-			tabResult.setLabel(Msg.getMsg(Env.getCtx(), "Result").replaceAll("[&]", "") + " - "
-					+ Msg.getMsg(Env.getCtx(), "AccountsOverView").replaceAll("[&]", ""));
+			String translate = "";
+			String trl_Result = "";
+			if(languageCode.equals("it")) { 
+				translate = "Riepilogo Conti";
+				trl_Result = "Risultato";
+			}
+			else {
+				translate = "AccountsOverView";
+				trl_Result = "Result";
+			}
+			tabResult.setLabel(Msg.getMsg(Env.getCtx(), trl_Result).replaceAll("[&]", "") + " - "
+					+ Msg.getMsg(Env.getCtx(), translate).replaceAll("[&]", ""));
 			tabParameter.setLabel(Msg.getMsg(Env.getCtx(), "Query").replaceAll("[&]", "") + " - "
-					+ Msg.getMsg(Env.getCtx(), "AccountsOverView").replaceAll("[&]", ""));
+					+ Msg.getMsg(Env.getCtx(), translate).replaceAll("[&]", ""));
 
 		}
 
@@ -1059,11 +1145,20 @@ public class PAT_WAcctInfCptForm
 			rowAdjustmentPeriod.setVisible(true);
 
 			tabBox.setSelectedIndex(0);
-
-			tabResult.setLabel(Msg.getMsg(Env.getCtx(), "Result").replaceAll("[&]", "") + " - "
-					+ Msg.getMsg(Env.getCtx(), "AccountOverView").replaceAll("[&]", ""));
+			String translate = "";
+			String trl_Result = "";
+			if(languageCode.equals("it")) { 
+				translate = "Riepilogo Singolo Conto";
+				trl_Result = "Risultato";
+			}
+			else {
+				translate = "AccountOverView";
+				trl_Result = "Result";
+			}
+			tabResult.setLabel(Msg.getMsg(Env.getCtx(), trl_Result).replaceAll("[&]", "") + " - "
+					+ Msg.getMsg(Env.getCtx(), translate).replaceAll("[&]", ""));
 			tabParameter.setLabel(Msg.getMsg(Env.getCtx(), "Query").replaceAll("[&]", "") + " - "
-					+ Msg.getMsg(Env.getCtx(), "AccountOverView").replaceAll("[&]", ""));
+					+ Msg.getMsg(Env.getCtx(), translate).replaceAll("[&]", ""));
 
 		}
 
@@ -1092,11 +1187,20 @@ public class PAT_WAcctInfCptForm
 			rowAdjustmentPeriod.setVisible(false);
 
 			tabBox.setSelectedIndex(0);
-
-			tabResult.setLabel(Msg.getMsg(Env.getCtx(), "Result").replaceAll("[&]", "") + " - "
-					+ Msg.getMsg(Env.getCtx(), "SummaryDocument").replaceAll("[&]", ""));
+			String translate = "";
+			String trl_Result = "";
+			if(languageCode.equals("it")) { 
+				translate = "Registrazione Documento";
+				trl_Result = "Risultato";
+			}
+			else {
+				translate = "SummaryDocument";
+				trl_Result = "Result";
+			}
+			tabResult.setLabel(Msg.getMsg(Env.getCtx(), trl_Result).replaceAll("[&]", "") + " - "
+					+ Msg.getMsg(Env.getCtx(), translate).replaceAll("[&]", ""));
 			tabParameter.setLabel(Msg.getMsg(Env.getCtx(), "Query").replaceAll("[&]", "") + " - "
-					+ Msg.getMsg(Env.getCtx(), "SummaryDocument").replaceAll("[&]", ""));
+					+ Msg.getMsg(Env.getCtx(), translate).replaceAll("[&]", ""));
 		}
 
 		if (event.getTarget() == tButtonSummary) {
@@ -1127,11 +1231,20 @@ public class PAT_WAcctInfCptForm
 			rowAdjustmentPeriod.setVisible(true);
 
 			tabBox.setSelectedIndex(0);
-
-			tabResult.setLabel(Msg.getMsg(Env.getCtx(), "Result").replaceAll("[&]", "") + " - "
-					+ Msg.getMsg(Env.getCtx(), "Summary").replaceAll("[&]", ""));
+			String translate = "";
+			String trl_Result = "";
+			if(languageCode.equals("it")) { 
+				translate = "Raggruppamento temporale";
+				trl_Result = "Risultato";
+			}
+			else {
+				translate = "Summary";
+				trl_Result = "Result";
+			}
+			tabResult.setLabel(Msg.getMsg(Env.getCtx(), trl_Result).replaceAll("[&]", "") + " - "
+					+ Msg.getMsg(Env.getCtx(), translate).replaceAll("[&]", ""));
 			tabParameter.setLabel(Msg.getMsg(Env.getCtx(), "Query").replaceAll("[&]", "") + " - "
-					+ Msg.getMsg(Env.getCtx(), "Summary").replaceAll("[&]", ""));
+					+ Msg.getMsg(Env.getCtx(), translate).replaceAll("[&]", ""));
 
 		}
 		
@@ -1163,11 +1276,20 @@ public class PAT_WAcctInfCptForm
 			rowAdjustmentPeriod.setVisible(true);
 
 			tabBox.setSelectedIndex(0);
-
-			tabResult.setLabel(Msg.getMsg(Env.getCtx(), "Result").replaceAll("[&]", "") + " - "
-					+ Msg.getMsg(Env.getCtx(), "BalanceOfAccountsList").replaceAll("[&]", ""));
+			String translate = "";
+			String trl_Result = "";
+			if(languageCode.equals("it")) { 
+				translate = "Bilancio di verifica";
+				trl_Result = "Risultato";
+			}
+			else {
+				translate = "BalanceOfAccountsList";
+				trl_Result = "Result";
+			}
+			tabResult.setLabel(Msg.getMsg(Env.getCtx(), trl_Result).replaceAll("[&]", "") + " - "
+					+ Msg.getMsg(Env.getCtx(), translate).replaceAll("[&]", ""));
 			tabParameter.setLabel(Msg.getMsg(Env.getCtx(), "Query").replaceAll("[&]", "") + " - "
-					+ Msg.getMsg(Env.getCtx(), "BalanceOfAccountsList").replaceAll("[&]", ""));
+					+ Msg.getMsg(Env.getCtx(), translate).replaceAll("[&]", ""));
 
 		}
 		
@@ -1198,11 +1320,20 @@ public class PAT_WAcctInfCptForm
 			rowAdjustmentPeriod.setVisible(true);
 
 			tabBox.setSelectedIndex(0);
-
-			tabResult.setLabel(Msg.getMsg(Env.getCtx(), "Result").replaceAll("[&]", "") + " - "
-					+ Msg.getMsg(Env.getCtx(), "TreeSummary").replaceAll("[&]", ""));
+			String translate = "";
+			String trl_Result = "";
+			if(languageCode.equals("it")) { 
+				translate = "Bilancio Mese / Anno";
+				trl_Result = "Risultato";
+			}
+			else {
+				translate = "TreeSummary";
+				trl_Result = "Result";
+			}
+			tabResult.setLabel(Msg.getMsg(Env.getCtx(), trl_Result).replaceAll("[&]", "") + " - "
+					+ Msg.getMsg(Env.getCtx(), translate).replaceAll("[&]", ""));
 			tabParameter.setLabel(Msg.getMsg(Env.getCtx(), "Query").replaceAll("[&]", "") + " - "
-					+ Msg.getMsg(Env.getCtx(), "TreeSummary").replaceAll("[&]", ""));
+					+ Msg.getMsg(Env.getCtx(), translate).replaceAll("[&]", ""));
 
 		}
 
