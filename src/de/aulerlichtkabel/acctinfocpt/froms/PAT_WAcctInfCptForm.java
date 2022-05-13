@@ -245,8 +245,8 @@ public class PAT_WAcctInfCptForm
 
 		init();
 		createTabs();
-		createToolbar();
-		createParameterPanel();
+//		createToolbar();
+//		createParameterPanel();
 		createResultPanel();
 		createSouthPanel();
 
@@ -255,29 +255,29 @@ public class PAT_WAcctInfCptForm
 	private void init() {
 		languageCode = Env.getLanguage(Env.getCtx()).getLanguageCode();
 		
-		textboxClient.setReadonly(true);
-
-		MLookup acctVaL = MLookupFactory.get(Env.getCtx(), mForm.getWindowNo(), 0, 207736, DisplayType.Search);
-		searchEditorValueFrom = new WSearchEditor("C_ElementValue_ID", false, false, true, acctVaL);
-		searchEditorValueTo = new WSearchEditor("C_ElementValue_ID", false, false, true, acctVaL);
-
-		labelProduct.setValue(Msg.translate(Env.getCtx(), "M_Product_ID"));
-		MLookup productVaL = MLookupFactory.get(Env.getCtx(), mForm.getWindowNo(), 0, 1402, DisplayType.Search);
-		searchEditorProduct = new WSearchEditor("M_Product_ID", false, false, true, productVaL);
-
-		labelBPartner.setValue(Msg.translate(Env.getCtx(), "C_BPartner_ID"));
-		MLookup bPartnerVaL = MLookupFactory.get(Env.getCtx(), mForm.getWindowNo(), 0, 2893, DisplayType.Search);
-		searchEditorBPartner = new WSearchEditor("C_BPartner_ID", false, false, true, bPartnerVaL);
-
-		labelSalesRegion.setValue(Msg.translate(Env.getCtx(), "C_SalesRegion_ID"));
-		MLookup salesRegionVaL = MLookupFactory.get(Env.getCtx(), mForm.getWindowNo(), 0, 1823, DisplayType.Search);
-		searchEditorSalesRegion = new WSearchEditor("C_SalesRegion_ID", false, false, true, salesRegionVaL);
-
-		labelProject.setValue(Msg.translate(Env.getCtx(), "C_Project_ID"));
-		MLookup projectVaL = MLookupFactory.get(Env.getCtx(), mForm.getWindowNo(), 0, 1349, DisplayType.Search);
-		searchEditorProject = new WSearchEditor("C_Project_ID", false, false, true, projectVaL);
-		
-		listboxResult.setSizedByContent(true);
+//		textboxClient.setReadonly(true);
+//
+//		MLookup acctVaL = MLookupFactory.get(Env.getCtx(), mForm.getWindowNo(), 0, 207736, DisplayType.Search);
+//		searchEditorValueFrom = new WSearchEditor("C_ElementValue_ID", false, false, true, acctVaL);
+//		searchEditorValueTo = new WSearchEditor("C_ElementValue_ID", false, false, true, acctVaL);
+//
+//		labelProduct.setValue(Msg.translate(Env.getCtx(), "M_Product_ID"));
+//		MLookup productVaL = MLookupFactory.get(Env.getCtx(), mForm.getWindowNo(), 0, 1402, DisplayType.Search);
+//		searchEditorProduct = new WSearchEditor("M_Product_ID", false, false, true, productVaL);
+//
+//		labelBPartner.setValue(Msg.translate(Env.getCtx(), "C_BPartner_ID"));
+//		MLookup bPartnerVaL = MLookupFactory.get(Env.getCtx(), mForm.getWindowNo(), 0, 2893, DisplayType.Search);
+//		searchEditorBPartner = new WSearchEditor("C_BPartner_ID", false, false, true, bPartnerVaL);
+//
+//		labelSalesRegion.setValue(Msg.translate(Env.getCtx(), "C_SalesRegion_ID"));
+//		MLookup salesRegionVaL = MLookupFactory.get(Env.getCtx(), mForm.getWindowNo(), 0, 1823, DisplayType.Search);
+//		searchEditorSalesRegion = new WSearchEditor("C_SalesRegion_ID", false, false, true, salesRegionVaL);
+//
+//		labelProject.setValue(Msg.translate(Env.getCtx(), "C_Project_ID"));
+//		MLookup projectVaL = MLookupFactory.get(Env.getCtx(), mForm.getWindowNo(), 0, 1349, DisplayType.Search);
+//		searchEditorProject = new WSearchEditor("C_Project_ID", false, false, true, projectVaL);
+//		
+//		listboxResult.setSizedByContent(true);
 		
 		LayoutUtils.addSclass("AccountInfoCockpit", mForm);
 

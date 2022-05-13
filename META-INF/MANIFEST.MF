@@ -2,16 +2,16 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: AccountinfoCockpit
 Bundle-SymbolicName: auler.gmbh.acctinfocpt;singleton:=true
-Bundle-Version: 7.1.0.qualifier
+Bundle-Version: 10.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Activator: org.adempiere.plugin.utils.Incremental2PackActivator
-Require-Bundle: org.idempiere.zk.extra;bundle-version="1.0.0",
- org.adempiere.base;bundle-version="7.1.0",
- org.adempiere.ui.zk;bundle-version="7.1.0",
- org.adempiere.plugin.utils;bundle-version="7.1.0",
- zcommon;bundle-version="8.6.0",
- zk;bundle-version="8.6.0",
- zul;bundle-version="8.6.0"
+Require-Bundle: org.idempiere.zk.extra,
+ org.adempiere.base,
+ org.adempiere.ui.zk,
+ org.adempiere.plugin.utils,
+ zcommon,
+ zk,
+ zul
 Service-Component: OSGI-INF/*.xml
 Bundle-Vendor: Patric Maßing (Hans Auler GmbH)
 Bundle-ActivationPolicy: lazy
